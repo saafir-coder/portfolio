@@ -4,25 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abdillahi Ahmed — AI Systems Engineer</title>
-    <meta name="description" content="AI Systems Engineer building autonomous production systems. Based in Germany, open to remote.">
+    <meta name="description" content="AI Systems Engineer building autonomous production systems. 6 systems running 24/7. Based in Germany, open to remote.">
+    <meta property="og:title" content="Abdillahi Ahmed — AI Systems Engineer">
+    <meta property="og:description" content="I build autonomous AI systems that run in production. 6 systems, 19 tasks, under $15/month.">
+    <meta property="og:type" content="website">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f0f0f;
-            --card: #1a1a1a;
-            --card-hover: #222;
-            --border: #2a2a2a;
-            --text: #e0e0e0;
-            --muted: #888;
-            --accent: #c8ff00;
-            --accent-dim: rgba(200,255,0,0.15);
-            --blue: #83a598;
-            --purple: #d3869b;
-            --orange: #fe8019;
-            --red: #fb4934;
-            --green: #b8bb26;
-            --gold: #fabd2f;
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --card: #16161f;
+            --card-hover: #1c1c28;
+            --border: #252530;
+            --border-hover: #3a3a4a;
+            --text: #e4e4ed;
+            --muted: #8888a0;
+            --accent: #5eead4;
+            --accent-dim: rgba(94,234,212,0.1);
+            --accent-strong: rgba(94,234,212,0.2);
+            --blue: #7dd3fc;
+            --purple: #c4b5fd;
+            --orange: #fdba74;
+            --green: #86efac;
+            --gold: #fde68a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,23 +41,27 @@
 
         .mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* Personalized Banner */
+        /* Scroll fade-in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Personalized Company Banner */
         .company-banner {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
             border-bottom: 2px solid var(--accent);
-            padding: 40px 24px;
+            padding: 48px 24px;
             display: none;
         }
         .company-banner.visible { display: block; }
-        .company-banner .inner {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .company-banner h2 {
-            color: var(--accent);
-            font-size: 22px;
-            margin-bottom: 16px;
-        }
+        .company-banner .inner { max-width: 800px; margin: 0 auto; }
+        .company-banner h2 { color: var(--accent); font-size: 22px; margin-bottom: 16px; }
         .company-banner .research {
             background: rgba(0,0,0,0.3);
             border-radius: 8px;
@@ -60,29 +69,15 @@
             margin: 16px 0;
             color: #ccc;
             font-size: 15px;
-            line-height: 1.7;
+            line-height: 1.8;
             white-space: pre-line;
         }
-        .company-banner .loom-embed {
-            margin: 20px 0;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .company-banner .loom-embed iframe {
-            width: 100%;
-            aspect-ratio: 16/9;
-            border: none;
-            border-radius: 8px;
-        }
-        .company-loading {
-            color: var(--muted);
-            padding: 20px;
-            text-align: center;
-        }
+        .company-banner .loom-embed { margin: 20px 0; border-radius: 8px; overflow: hidden; }
+        .company-banner .loom-embed iframe { width: 100%; aspect-ratio: 16/9; border: none; border-radius: 8px; }
 
-        /* Nav */
+        /* Nav — Brittany Chiang style sticky sidebar feel */
         nav {
-            background: var(--card);
+            background: rgba(10,10,15,0.85);
             border-bottom: 1px solid var(--border);
             padding: 14px 24px;
             display: flex;
@@ -91,207 +86,287 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
         }
         nav .name {
             font-family: 'JetBrains Mono', monospace;
             font-weight: 700;
             color: var(--accent);
             font-size: 16px;
+            letter-spacing: -0.5px;
         }
-        nav .links { display: flex; gap: 20px; }
+        nav .links { display: flex; gap: 24px; align-items: center; }
         nav .links a {
             color: var(--muted);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 500;
             transition: color 0.2s;
+            letter-spacing: 0.3px;
         }
         nav .links a:hover { color: var(--accent); }
+        nav .links .cta-nav {
+            background: var(--accent);
+            color: var(--bg);
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        nav .links .cta-nav:hover { opacity: 0.9; color: var(--bg); }
 
-        /* Sections */
-        section { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
-        section + section { padding-top: 0; }
+        /* Container */
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
 
-        /* Hero */
+        /* Hero — clean, Brittany Chiang inspired */
         .hero {
-            padding: 80px 24px;
-            max-width: 1100px;
+            padding: 100px 24px 60px;
+            max-width: 1000px;
             margin: 0 auto;
         }
-        .hero .tag {
-            display: inline-block;
-            background: var(--accent-dim);
-            color: var(--accent);
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 13px;
+        .hero-top {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .hero-photo {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            object-fit: cover;
+        }
+        .hero-intro {
+            font-size: 14px;
+            color: var(--muted);
             font-family: 'JetBrains Mono', monospace;
-            margin-bottom: 16px;
         }
         .hero h1 {
-            font-size: clamp(32px, 5vw, 52px);
+            font-size: clamp(28px, 4.5vw, 48px);
             font-weight: 700;
             line-height: 1.15;
             margin-bottom: 20px;
+            letter-spacing: -1px;
         }
-        .hero h1 .highlight { color: var(--accent); }
+        .hero h1 .hl { color: var(--accent); }
         .hero .subtitle {
-            font-size: 18px;
+            font-size: 16px;
             color: var(--muted);
-            max-width: 650px;
-            line-height: 1.7;
-            margin-bottom: 32px;
+            max-width: 580px;
+            line-height: 1.8;
+            margin-bottom: 36px;
         }
-        .hero .links { display: flex; gap: 12px; flex-wrap: wrap; }
-        .hero .links a {
+        .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 10px 20px;
-            border-radius: 6px;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             text-decoration: none;
             transition: all 0.2s;
+            border: none;
+            cursor: pointer;
         }
-        .hero .links .primary {
-            background: var(--accent);
-            color: #000;
-        }
-        .hero .links .primary:hover { opacity: 0.9; }
-        .hero .links .secondary {
-            background: var(--card);
+        .btn-primary { background: var(--accent); color: var(--bg); }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-secondary {
+            background: transparent;
             color: var(--text);
             border: 1px solid var(--border);
         }
-        .hero .links .secondary:hover { border-color: var(--accent); color: var(--accent); }
+        .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
-        /* Metrics */
-        .metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin-bottom: 60px;
+        /* Metrics strip */
+        .metrics-strip {
+            display: flex;
+            gap: 32px;
+            padding: 32px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin: 48px 0;
+            flex-wrap: wrap;
+            justify-content: center;
         }
-        .metric-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
+        .metric {
             text-align: center;
         }
-        .metric-card .number {
+        .metric .num {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 700;
             color: var(--accent);
+            line-height: 1;
         }
-        .metric-card .label {
-            font-size: 13px;
+        .metric .lbl {
+            font-size: 12px;
             color: var(--muted);
-            margin-top: 4px;
+            margin-top: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Section headers */
-        .section-header {
-            margin-bottom: 32px;
+        /* Section */
+        .section {
+            padding: 80px 0;
         }
-        .section-header h2 {
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+        .section-title {
             font-size: 28px;
             font-weight: 700;
             margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
-        .section-header p {
+        .section-desc {
             color: var(--muted);
             font-size: 15px;
+            margin-bottom: 40px;
+            max-width: 600px;
         }
 
-        /* Systems Grid */
-        .systems-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-        }
-        .system-card {
+        /* Project Case Studies */
+        .project {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 24px;
-            transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+            transition: border-color 0.3s, transform 0.2s;
         }
-        .system-card:hover {
-            border-color: var(--accent);
+        .project:hover {
+            border-color: var(--border-hover);
             transform: translateY(-2px);
         }
-        .system-card .status {
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .project-status {
             display: inline-flex;
             align-items: center;
             gap: 6px;
             font-size: 11px;
             font-family: 'JetBrains Mono', monospace;
-            margin-bottom: 12px;
+            color: var(--green);
         }
-        .status-live { color: var(--green); }
-        .status-live::before {
+        .project-status::before {
             content: '';
             width: 6px; height: 6px;
             background: var(--green);
             border-radius: 50%;
-            display: inline-block;
             animation: pulse 2s infinite;
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .project h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
         }
-        .system-card h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-        .system-card .desc {
-            color: var(--muted);
-            font-size: 14px;
-            line-height: 1.6;
-            flex: 1;
-            margin-bottom: 16px;
-        }
-        .system-card .tech {
+        .project-links {
             display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 16px;
+            gap: 16px;
         }
-        .tech-badge {
-            background: var(--accent-dim);
-            color: var(--accent);
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .tech-badge.blue { background: rgba(131,165,152,0.15); color: var(--blue); }
-        .tech-badge.purple { background: rgba(211,134,155,0.15); color: var(--purple); }
-        .tech-badge.orange { background: rgba(254,128,25,0.15); color: var(--orange); }
-        .tech-badge.gold { background: rgba(250,189,47,0.15); color: var(--gold); }
-        .system-card .links {
-            display: flex;
-            gap: 10px;
-        }
-        .system-card .links a {
+        .project-links a {
             font-size: 13px;
             color: var(--accent);
             text-decoration: none;
             font-weight: 500;
+            transition: opacity 0.2s;
         }
-        .system-card .links a:hover { text-decoration: underline; }
+        .project-links a:hover { opacity: 0.7; }
 
-        /* Skills */
+        /* Case study sections inside project */
+        .case-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .case-block h4 {
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+        .case-block p {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+        .case-block .result {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* Tech badges */
+        .tech-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 16px;
+        }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--accent-dim);
+            color: var(--accent);
+        }
+        .badge.blue { background: rgba(125,211,252,0.1); color: var(--blue); }
+        .badge.purple { background: rgba(196,181,253,0.1); color: var(--purple); }
+        .badge.orange { background: rgba(253,186,116,0.1); color: var(--orange); }
+        .badge.gold { background: rgba(253,230,138,0.1); color: var(--gold); }
+
+        /* Architecture diagram placeholder */
+        .arch-diagram {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.8;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* YouTube embed */
+        .video-embed {
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .video-embed iframe {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: none;
+        }
+
+        /* Skills — compact */
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
         }
         .skill-group {
             background: var(--card);
@@ -300,71 +375,76 @@
             padding: 20px;
         }
         .skill-group h3 {
-            font-size: 14px;
+            font-size: 12px;
             color: var(--accent);
             font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             margin-bottom: 12px;
         }
-        .skill-group ul {
-            list-style: none;
-        }
+        .skill-group ul { list-style: none; }
         .skill-group li {
             color: var(--text);
-            font-size: 14px;
-            padding: 4px 0;
-        }
-        .skill-group li::before {
-            content: '>';
-            color: var(--accent);
-            font-family: 'JetBrains Mono', monospace;
-            margin-right: 8px;
+            font-size: 13px;
+            padding: 3px 0;
         }
 
         /* Contact */
-        .contact-grid {
+        .contact-section {
+            text-align: center;
+            padding: 80px 0;
+        }
+        .contact-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .contact-section p {
+            color: var(--muted);
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+        .contact-links {
             display: flex;
-            gap: 16px;
+            gap: 12px;
+            justify-content: center;
             flex-wrap: wrap;
         }
-        .contact-card {
+        .contact-link {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 16px 24px;
+            padding: 14px 24px;
             text-decoration: none;
             color: var(--text);
             font-size: 14px;
+            font-weight: 500;
             transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
-        .contact-card:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-        .contact-card .icon { font-size: 18px; }
+        .contact-link:hover { border-color: var(--accent); color: var(--accent); }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 40px 24px;
+            padding: 32px 24px;
             color: var(--muted);
-            font-size: 13px;
+            font-size: 12px;
             border-top: 1px solid var(--border);
         }
 
-        @media (max-width: 600px) {
-            .hero { padding: 40px 16px; }
-            section { padding: 40px 16px; }
-            .metrics { grid-template-columns: repeat(2, 1fr); }
-            .systems-grid { grid-template-columns: 1fr; }
+        @media (max-width: 640px) {
+            .hero { padding: 60px 16px 40px; }
+            .case-grid { grid-template-columns: 1fr; }
+            .metrics-strip { gap: 20px; }
+            .project { padding: 20px; }
+            nav .links { gap: 12px; }
+            nav .links .cta-nav { display: none; }
         }
     </style>
 </head>
 <body>
 
-<!-- Personalized Company Banner (hidden by default, shown via ?company=X) -->
+<!-- Personalized Company Banner -->
 <div class="company-banner" id="companyBanner">
     <div class="inner">
         <h2 id="companyGreeting"></h2>
@@ -373,242 +453,371 @@
     </div>
 </div>
 
-<!-- Navigation -->
+<!-- Nav -->
 <nav>
-    <span class="name">moha.dev</span>
+    <span class="name">abdillahi.dev</span>
     <div class="links">
-        <a href="#systems">Systems</a>
+        <a href="#work">Work</a>
         <a href="#skills">Skills</a>
         <a href="cv.html">CV</a>
         <a href="https://github.com/saafir-coder" target="_blank">GitHub</a>
         <a href="https://www.youtube.com/@iNNERSIZE" target="_blank">YouTube</a>
+        <a href="#contact" class="cta-nav">Get in Touch</a>
     </div>
 </nav>
 
 <!-- Hero -->
 <div class="hero">
-    <div style="display:flex;align-items:center;gap:24px;margin-bottom:20px;">
-        <img src="assets/profile.png" alt="Abdillahi Ahmed" style="width:80px;height:80px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;">
-        <div class="tag">AI Systems Engineer</div>
+    <div class="hero-top">
+        <img src="assets/profile.png" alt="Abdillahi Ahmed" class="hero-photo">
+        <div class="hero-intro">AI Systems Engineer / Germany / Remote</div>
     </div>
-    <h1>I build <span class="highlight">autonomous AI systems</span> that run in production.</h1>
+    <h1>I build <span class="hl">autonomous AI systems</span> that run in production.</h1>
     <p class="subtitle">
-        6 systems running 24/7. 19 Trigger.dev tasks. Fully autonomous LinkedIn publishing.
-        RAG memory with 796 entries. All for under $15/month. Based in Germany, open to remote.
+        I design and deploy end-to-end AI automation pipelines — from LLM integration
+        and multi-agent orchestration to self-healing workflows and real-time monitoring.
+        Currently 6 systems running 24/7 at under $15/month total infrastructure cost.
     </p>
-    <div class="links">
-        <a href="cv.html" class="primary">View CV</a>
-        <a href="https://github.com/saafir-coder" target="_blank" class="secondary">GitHub</a>
-        <a href="https://www.youtube.com/@iNNERSIZE" target="_blank" class="secondary">YouTube</a>
-        <a href="https://www.linkedin.com/in/abdillahi-ahmed-95a0a71a3/" target="_blank" class="secondary">LinkedIn</a>
+    <div class="hero-ctas">
+        <a href="#work" class="btn btn-primary">See What I've Built</a>
+        <a href="cv.html" class="btn btn-secondary">Download CV</a>
+        <a href="#contact" class="btn btn-secondary">Get in Touch</a>
     </div>
 </div>
 
 <!-- Metrics -->
-<section>
-    <div class="metrics">
-        <div class="metric-card">
-            <div class="number">6</div>
-            <div class="label">Systems in Production</div>
-        </div>
-        <div class="metric-card">
-            <div class="number">19</div>
-            <div class="label">Trigger.dev Tasks</div>
-        </div>
-        <div class="metric-card">
-            <div class="number">796</div>
-            <div class="label">Memory Entries (pgvector)</div>
-        </div>
-        <div class="metric-card">
-            <div class="number">6/day</div>
-            <div class="label">Autonomous LinkedIn Posts</div>
-        </div>
-        <div class="metric-card">
-            <div class="number">&lt;$15</div>
-            <div class="label">Monthly Infra Cost</div>
-        </div>
+<div class="container">
+    <div class="metrics-strip fade-in">
+        <div class="metric"><div class="num">6</div><div class="lbl">Production Systems</div></div>
+        <div class="metric"><div class="num">19</div><div class="lbl">Trigger.dev Tasks</div></div>
+        <div class="metric"><div class="num">796</div><div class="lbl">Memory Entries</div></div>
+        <div class="metric"><div class="num">6/day</div><div class="lbl">Autonomous Posts</div></div>
+        <div class="metric"><div class="num">&lt;$15</div><div class="lbl">Monthly Cost</div></div>
     </div>
-</section>
+</div>
 
-<!-- Systems Built -->
-<section id="systems">
-    <div class="section-header">
-        <h2>Systems I've Built</h2>
-        <p>Production systems running autonomously — not demos, not prototypes.</p>
-    </div>
-    <div class="systems-grid">
+<!-- Work / Case Studies -->
+<div class="container">
+<section class="section" id="work">
+    <div class="section-label">Featured Work</div>
+    <div class="section-title">Systems I've Built</div>
+    <div class="section-desc">Production systems running autonomously — not demos, not prototypes. Each one solves a real problem and runs without human intervention.</div>
 
-        <div class="system-card">
-            <div class="status status-live">LIVE</div>
-            <h3>LinkedIn Self-Healing Authority System</h3>
-            <p class="desc">Fully autonomous content engine: generates posts, self-approves, publishes 6/day, measures engagement, runs A/B experiments, and optimizes — zero human intervention. Self-healing with automatic error recovery.</p>
-            <div class="tech">
-                <span class="tech-badge">n8n</span>
-                <span class="tech-badge blue">Trigger.dev</span>
-                <span class="tech-badge purple">Supabase</span>
-                <span class="tech-badge orange">Claude API</span>
-                <span class="tech-badge gold">LinkedIn OAuth2</span>
+    <!-- Project 1: LinkedIn System -->
+    <div class="project fade-in">
+        <div class="project-header">
+            <div>
+                <div class="project-status">LIVE IN PRODUCTION</div>
+                <h3>LinkedIn Self-Healing Authority System</h3>
             </div>
-            <div class="links">
+            <div class="project-links">
                 <a href="https://github.com/saafir-coder/linkedin-self-healing" target="_blank">Source</a>
                 <a href="https://saafir-coder.github.io/linkedin-dashboard/" target="_blank">Live Dashboard</a>
             </div>
         </div>
 
-        <div class="system-card">
-            <div class="status status-live">LIVE</div>
-            <h3>Job Intelligence Pipeline</h3>
-            <p class="desc">Daily autonomous job discovery: scrapes AI roles across Germany, scores each for fit using Claude Haiku with honest gap analysis, generates tailored applications, and notifies via Telegram with one-tap approval.</p>
-            <div class="tech">
-                <span class="tech-badge blue">Trigger.dev</span>
-                <span class="tech-badge orange">Claude Haiku</span>
-                <span class="tech-badge">Apify</span>
-                <span class="tech-badge purple">Supabase</span>
-                <span class="tech-badge gold">Telegram Bot</span>
+        <div class="case-grid">
+            <div class="case-block">
+                <h4>Problem</h4>
+                <p>Maintaining consistent LinkedIn presence requires hours of daily content creation, publishing, and engagement tracking. Most people give up within weeks.</p>
             </div>
-            <div class="links">
+            <div class="case-block">
+                <h4>Solution</h4>
+                <p>Fully autonomous content engine: generates briefs from topic seeds, creates posts via Claude, self-approves based on quality scoring, publishes via OAuth2, and runs A/B experiments — all with zero human intervention.</p>
+            </div>
+            <div class="case-block">
+                <h4>Results</h4>
+                <p><span class="result">6 posts/day published autonomously.</span> Self-healing error recovery. A/B experiments with statistical confidence tracking. Operating cost: $5-15/month.</p>
+            </div>
+            <div class="case-block">
+                <h4>How It Works</h4>
+                <p>n8n generates briefs every 3h. Trigger.dev auto-publisher runs every 30min. Apify collects engagement at 25h/49h/73h. Experiment runner creates A/B variants. Daily digest summarizes everything via Telegram.</p>
+            </div>
+        </div>
+
+        <div class="arch-diagram">n8n (Brief Generator, 3h)  ──>  Supabase (content_briefs)
+                                         │
+                                         v
+Trigger.dev (Auto-Publisher, 30min)  ──>  LinkedIn OAuth2  ──>  Published Post
+                                         │
+                                         v
+Apify (Metrics Collector, 4h)  ──>  Supabase (post_metrics)  ──>  Dashboard
+                                         │
+                                         v
+Trigger.dev (Experiment Runner, 6h)  ──>  A/B Test Variants  ──>  Optimization Loop</div>
+
+        <div class="tech-row">
+            <span class="badge">n8n</span>
+            <span class="badge blue">Trigger.dev</span>
+            <span class="badge purple">Supabase</span>
+            <span class="badge orange">Claude API</span>
+            <span class="badge gold">LinkedIn OAuth2</span>
+            <span class="badge">Apify</span>
+        </div>
+    </div>
+
+    <!-- Project 2: Job Intelligence Pipeline -->
+    <div class="project fade-in">
+        <div class="project-header">
+            <div>
+                <div class="project-status">LIVE IN PRODUCTION</div>
+                <h3>Job Intelligence Pipeline</h3>
+            </div>
+            <div class="project-links">
                 <a href="https://github.com/saafir-coder/inner-sizze-trigger" target="_blank">Source</a>
             </div>
         </div>
 
-        <div class="system-card">
-            <div class="status status-live">LIVE</div>
-            <h3>Open Brain — AI Memory Engine</h3>
-            <p class="desc">Universal memory layer for AI assistants. Supabase + pgvector for semantic search across 796 memory entries. Any AI (Claude, GPT, Cursor) can read and write to shared long-term memory via MCP.</p>
-            <div class="tech">
-                <span class="tech-badge purple">Supabase</span>
-                <span class="tech-badge">pgvector</span>
-                <span class="tech-badge blue">Edge Functions</span>
-                <span class="tech-badge gold">MCP Protocol</span>
+        <div class="case-grid">
+            <div class="case-block">
+                <h4>Problem</h4>
+                <p>Finding AI engineering roles in Germany requires daily searching across multiple job boards, reading hundreds of descriptions, and evaluating fit — a full-time job on its own.</p>
             </div>
-            <div class="links">
+            <div class="case-block">
+                <h4>Solution</h4>
+                <p>Daily autonomous pipeline: scrapes AI roles from Indeed, scores each against my profile using Claude Haiku with honest gap analysis, generates tailored cover letters, and notifies via Telegram with one-tap approval.</p>
+            </div>
+            <div class="case-block">
+                <h4>Results</h4>
+                <p><span class="result">9 search queries daily. Honest 1-10 fit scoring.</span> Auto-generated applications for 7+ scores. Company research triggered on approval. Full audit trail in Supabase.</p>
+            </div>
+            <div class="case-block">
+                <h4>How It Works</h4>
+                <p>Daily 08:00 UTC: Apify scrapes Indeed with 9 search terms. Claude Haiku evaluates fit with hardcoded profile (skills + honest gaps). Score 7+ triggers cover letter generation + Telegram notification with APPLY/SKIP/SAVE buttons.</p>
+            </div>
+        </div>
+
+        <div class="arch-diagram">Apify (Indeed Scraper)  ──>  Job Listings  ──>  Claude Haiku (Fit Scorer)
+                                                              │
+                                                  Score >= 7  │  Score < 6
+                                                              v
+                                              Claude Haiku (Cover Letter)  ──>  Supabase (jobs.listings)
+                                                              │
+                                                              v
+                                              Telegram (APPLY / SKIP / SAVE)  ──>  Company Research</div>
+
+        <div class="tech-row">
+            <span class="badge blue">Trigger.dev</span>
+            <span class="badge orange">Claude Haiku</span>
+            <span class="badge">Apify</span>
+            <span class="badge purple">Supabase</span>
+            <span class="badge gold">Telegram Bot</span>
+        </div>
+    </div>
+
+    <!-- Project 3: Open Brain -->
+    <div class="project fade-in">
+        <div class="project-header">
+            <div>
+                <div class="project-status">LIVE IN PRODUCTION</div>
+                <h3>Open Brain — AI Memory Engine</h3>
+            </div>
+            <div class="project-links">
                 <a href="https://github.com/saafir-coder/open-brain" target="_blank">Source</a>
             </div>
         </div>
 
-        <div class="system-card">
-            <div class="status status-live">LIVE</div>
-            <h3>System Health Monitor</h3>
-            <p class="desc">Real-time monitoring dashboard for all autonomous systems. Tracks 17 tasks across n8n + Trigger.dev + Supabase. 6-hourly health snapshots, cost tracking, failure alerts with auto-deduplication.</p>
-            <div class="tech">
-                <span class="tech-badge blue">Trigger.dev</span>
-                <span class="tech-badge purple">Supabase</span>
-                <span class="tech-badge gold">Telegram Alerts</span>
+        <div class="case-grid">
+            <div class="case-block">
+                <h4>Problem</h4>
+                <p>AI assistants have no persistent memory between sessions. Every conversation starts from zero. Context is lost, decisions are repeated, and there's no shared knowledge across tools.</p>
             </div>
-            <div class="links">
+            <div class="case-block">
+                <h4>Solution</h4>
+                <p>Universal memory layer using Supabase + pgvector. Any AI (Claude, GPT, Cursor) can store and recall memories via MCP protocol. Semantic search finds relevant context even with imprecise queries.</p>
+            </div>
+            <div class="case-block">
+                <h4>Results</h4>
+                <p><span class="result">796 memories stored and searchable.</span> Cross-AI compatibility via MCP. Semantic search with pgvector embeddings. Edge Function API for real-time recall.</p>
+            </div>
+            <div class="case-block">
+                <h4>How It Works</h4>
+                <p>AI sends memory to Edge Function. OpenAI generates embeddings. Stored in pgvector with metadata. On recall: query is embedded, cosine similarity finds top matches. Claude Haiku enriches metadata on store.</p>
+            </div>
+        </div>
+
+        <div class="arch-diagram">AI Tool (Claude/GPT)  ──>  Edge Function  ──>  OpenAI (Embeddings)
+                                                        │
+                                                        v
+                                    Supabase (brain.memories + pgvector)
+                                                        │
+                                                        v
+                                    Semantic Search (cosine similarity)  ──>  Recall Results</div>
+
+        <div class="tech-row">
+            <span class="badge purple">Supabase</span>
+            <span class="badge">pgvector</span>
+            <span class="badge blue">Edge Functions</span>
+            <span class="badge gold">MCP Protocol</span>
+            <span class="badge orange">OpenAI Embeddings</span>
+        </div>
+    </div>
+
+    <!-- Project 4: System Monitor -->
+    <div class="project fade-in">
+        <div class="project-header">
+            <div>
+                <div class="project-status">LIVE IN PRODUCTION</div>
+                <h3>System Health Monitor</h3>
+            </div>
+            <div class="project-links">
                 <a href="https://saafir-coder.github.io/moha-os-dashboard/" target="_blank">Live Dashboard</a>
             </div>
         </div>
 
-        <div class="system-card">
-            <div class="status status-live">LIVE</div>
-            <h3>LinkedIn Analytics Dashboard</h3>
-            <p class="desc">Real-time engagement tracking for the autonomous LinkedIn system. Visualizes post performance at 25h/49h/73h intervals, A/B experiment results, and content pipeline health.</p>
-            <div class="tech">
-                <span class="tech-badge">Apify Scraper</span>
-                <span class="tech-badge purple">Supabase REST</span>
-                <span class="tech-badge blue">GitHub Pages</span>
+        <div class="case-grid">
+            <div class="case-block">
+                <h4>Problem</h4>
+                <p>Running 6 autonomous systems with 19 tasks creates a monitoring nightmare. Any task can fail silently. Without visibility, you don't know something's broken until it's too late.</p>
             </div>
-            <div class="links">
-                <a href="https://saafir-coder.github.io/linkedin-dashboard/" target="_blank">Live Dashboard</a>
+            <div class="case-block">
+                <h4>Solution</h4>
+                <p>Centralized health monitor that checks every registered system on a 6-hour cycle. Tracks status, last run time, consecutive failures, and cost per task. Alerts via Telegram with auto-deduplication to prevent noise.</p>
+            </div>
+            <div class="case-block">
+                <h4>Results</h4>
+                <p><span class="result">17 tasks monitored. 6-hourly snapshots.</span> Alert fingerprinting prevents duplicate notifications. Cost tracking per task shows exact monthly spend. Full system registry in Supabase.</p>
+            </div>
+            <div class="case-block">
+                <h4>How It Works</h4>
+                <p>Every 6h: query each system's last run time. Compare to expected interval. Flag stale/failing tasks. Store health snapshot in monitoring schema. Send alerts for new failures only (fingerprint dedup).</p>
             </div>
         </div>
 
-        <div class="system-card">
-            <div class="status status-live">LIVE</div>
-            <h3>Thumbnail Studio</h3>
-            <p class="desc">AI-powered YouTube thumbnail generator. 3-step pipeline: reference selection, character generation via Higgsfield Soul, and scene merging via Gemini Nano Banana 2. A/B test support built in.</p>
-            <div class="tech">
-                <span class="tech-badge orange">Gemini API</span>
-                <span class="tech-badge">Higgsfield Soul</span>
-                <span class="tech-badge blue">GitHub Pages</span>
+        <div class="tech-row">
+            <span class="badge blue">Trigger.dev</span>
+            <span class="badge purple">Supabase</span>
+            <span class="badge gold">Telegram Alerts</span>
+        </div>
+    </div>
+
+    <!-- Project 5: Thumbnail Studio -->
+    <div class="project fade-in">
+        <div class="project-header">
+            <div>
+                <div class="project-status">LIVE IN PRODUCTION</div>
+                <h3>Thumbnail Studio</h3>
             </div>
-            <div class="links">
-                <a href="https://saafir-coder.github.io/thumbnail-studio/" target="_blank">Try It</a>
+            <div class="project-links">
+                <a href="https://saafir-coder.github.io/thumbnail-studio/" target="_blank">Try It Live</a>
                 <a href="https://github.com/saafir-coder/thumbnail-studio" target="_blank">Source</a>
             </div>
         </div>
 
+        <div class="case-grid">
+            <div class="case-block">
+                <h4>Problem</h4>
+                <p>YouTube thumbnails require expensive tools or design skills. Creating consistent character thumbnails across videos is nearly impossible without a studio setup.</p>
+            </div>
+            <div class="case-block">
+                <h4>Solution</h4>
+                <p>3-step AI pipeline: pick any YouTube thumbnail as reference, generate your character with Higgsfield Soul 2.0 (pose/mood controls), then merge everything with Gemini Nano Banana 2. Built-in A/B testing for variants.</p>
+            </div>
+        </div>
+
+        <div class="tech-row">
+            <span class="badge orange">Gemini API</span>
+            <span class="badge">Higgsfield Soul</span>
+            <span class="badge blue">GitHub Pages</span>
+            <span class="badge purple">Piped/Invidious API</span>
+        </div>
+    </div>
+
+</section>
+
+<!-- YouTube Content -->
+<section class="section fade-in">
+    <div class="section-label">Content</div>
+    <div class="section-title">I document what I build</div>
+    <div class="section-desc">Technical walkthroughs of real systems on YouTube.</div>
+
+    <div class="video-embed">
+        <iframe src="https://www.youtube.com/embed/videoseries?list=UU@iNNERSIZE" title="YouTube Channel" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
     </div>
 </section>
 
 <!-- Skills -->
-<section id="skills">
-    <div class="section-header">
-        <h2>Technical Skills</h2>
-    </div>
+<section class="section fade-in" id="skills">
+    <div class="section-label">Technical Skills</div>
+    <div class="section-title">What I Work With</div>
+    <div class="section-desc"></div>
+
     <div class="skills-grid">
         <div class="skill-group">
             <h3>AI / LLM</h3>
             <ul>
-                <li>Claude (Haiku, Sonnet, Opus) — tool use, structured output</li>
-                <li>Prompt engineering — scoring, generation, evaluation</li>
-                <li>RAG — pgvector, semantic search, memory systems</li>
+                <li>Claude (Haiku, Sonnet, Opus)</li>
+                <li>Tool use + structured output</li>
+                <li>RAG with pgvector</li>
                 <li>Multi-agent orchestration</li>
-                <li>Gemini API (image generation)</li>
+                <li>Prompt engineering</li>
             </ul>
         </div>
         <div class="skill-group">
             <h3>Automation</h3>
             <ul>
-                <li>n8n — production workflows, OAuth2, webhooks</li>
-                <li>Trigger.dev — TypeScript task runner, cron scheduling</li>
-                <li>Apify — web scraping, data extraction</li>
-                <li>Instantly.ai — email outreach, sequences</li>
-                <li>Telegram Bot API — notifications, inline keyboards</li>
+                <li>n8n (production workflows)</li>
+                <li>Trigger.dev (TypeScript)</li>
+                <li>Apify (web scraping)</li>
+                <li>Instantly.ai (outreach)</li>
+                <li>Telegram Bot API</li>
             </ul>
         </div>
         <div class="skill-group">
             <h3>Infrastructure</h3>
             <ul>
-                <li>Supabase — PostgreSQL, Edge Functions, RLS, Storage</li>
-                <li>pgvector — vector embeddings, similarity search</li>
-                <li>GitHub Pages — static deployments, CI/CD</li>
-                <li>REST APIs — design, integration, error handling</li>
+                <li>Supabase + PostgreSQL</li>
+                <li>Edge Functions + RLS</li>
+                <li>pgvector embeddings</li>
+                <li>GitHub Pages / CI/CD</li>
+                <li>REST API design</li>
             </ul>
         </div>
         <div class="skill-group">
             <h3>Languages</h3>
             <ul>
-                <li>TypeScript — production code, SDK integrations</li>
-                <li>JavaScript — frontend, Node.js</li>
-                <li>Python — scripting, data processing</li>
-                <li>SQL — PostgreSQL, migrations, complex queries</li>
-                <li>HTML/CSS — responsive design, dark themes</li>
+                <li>TypeScript</li>
+                <li>JavaScript</li>
+                <li>Python</li>
+                <li>SQL</li>
+                <li>HTML / CSS</li>
             </ul>
         </div>
     </div>
 </section>
+</div>
 
 <!-- Contact -->
-<section id="contact">
-    <div class="section-header">
-        <h2>Get In Touch</h2>
-        <p>Open to AI Systems Engineer roles in Germany or remote.</p>
-    </div>
-    <div class="contact-grid">
-        <a class="contact-card" href="mailto:abdillahi@inner-sizze.com">
-            <span class="icon">@</span> abdillahi@inner-sizze.com
-        </a>
-        <a class="contact-card" href="https://github.com/saafir-coder" target="_blank">
-            <span class="icon">&lt;/&gt;</span> GitHub
-        </a>
-        <a class="contact-card" href="https://www.linkedin.com/in/abdillahi-ahmed-95a0a71a3/" target="_blank">
-            <span class="icon">in</span> LinkedIn
-        </a>
-        <a class="contact-card" href="https://www.youtube.com/@iNNERSIZE" target="_blank">
-            <span class="icon">&#9654;</span> YouTube
-        </a>
+<div class="container">
+<section class="contact-section fade-in" id="contact">
+    <h2>Let's talk.</h2>
+    <p>Open to AI Systems Engineer roles in Germany or remote.<br>If you have a problem that AI automation can solve, I want to hear about it.</p>
+    <div class="contact-links">
+        <a class="contact-link" href="mailto:abdillahi@inner-sizze.com">abdillahi@inner-sizze.com</a>
+        <a class="contact-link" href="https://github.com/saafir-coder" target="_blank">GitHub</a>
+        <a class="contact-link" href="https://www.linkedin.com/in/abdillahi-ahmed-95a0a71a3/" target="_blank">LinkedIn</a>
+        <a class="contact-link" href="https://www.youtube.com/@iNNERSIZE" target="_blank">YouTube</a>
     </div>
 </section>
+</div>
 
 <footer>
-    Built with autonomous systems. Runs on under $15/month.
+    Designed and built by Abdillahi Ahmed. Runs on autonomous systems at under $15/month.
 </footer>
 
 <script>
-    // Personalized company banner via ?company=X
-    // Fetches from Supabase jobs.outreach table using anon key (read-only)
+    // Scroll fade-in observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Personalized company banner
     const SUPABASE_URL = 'https://ettlhxpeefvenungjxju.supabase.co';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0dGxoeHBlZWZ2ZW51bmdqeGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxODc3NjksImV4cCI6MjA4Nzc2Mzc2OX0.7SAcxjdKHwfyc2sSgIdVCvaONYP_SE0KNuEUUwo9N0M';
 
@@ -622,40 +831,30 @@
         const research = document.getElementById('companyResearch');
         const loomEmbed = document.getElementById('loomEmbed');
 
-        greeting.textContent = `Hi ${company} team — here's what I'd build for you`;
+        greeting.textContent = `Hi ${company} team \u2014 here's what I'd build for you`;
         banner.classList.add('visible');
-        research.textContent = 'Loading research...';
+        research.textContent = 'Loading...';
 
         try {
             const resp = await fetch(
                 `${SUPABASE_URL}/rest/v1/outreach?company=ilike.%25${encodeURIComponent(company)}%25&order=created_at.desc&limit=1`,
-                {
-                    headers: {
-                        'apikey': SUPABASE_ANON,
-                        'Accept': 'application/json',
-                        'Accept-Profile': 'jobs',
-                    }
-                }
+                { headers: { 'apikey': SUPABASE_ANON, 'Accept': 'application/json', 'Accept-Profile': 'jobs' } }
             );
-
             if (!resp.ok) throw new Error('Not found');
             const data = await resp.json();
 
             if (data.length === 0) {
-                research.textContent = `I'm preparing a personalized analysis for ${company}. Check back soon, or feel free to explore my portfolio below.`;
+                research.textContent = `I'm preparing a personalized analysis for ${company}. Check back soon, or explore my work below.`;
                 return;
             }
 
             const row = data[0];
-
-            // Show research
             if (row.research_brief || row.pain_points) {
                 research.textContent = row.research_brief || row.pain_points;
             } else {
                 research.style.display = 'none';
             }
 
-            // Embed Loom video if available
             if (row.loom_url) {
                 const loomId = row.loom_url.match(/loom\.com\/share\/([a-zA-Z0-9]+)/);
                 if (loomId) {
@@ -663,9 +862,8 @@
                     loomEmbed.innerHTML = `<iframe src="https://www.loom.com/embed/${loomId[1]}" allowfullscreen></iframe>`;
                 }
             }
-
         } catch (e) {
-            research.textContent = `I'm preparing a personalized analysis for ${company}. Check back soon, or feel free to explore my portfolio below.`;
+            research.textContent = `I'm preparing a personalized analysis for ${company}. Check back soon, or explore my work below.`;
         }
     }
 
