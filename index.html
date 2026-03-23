@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdillahi Ahmed — AI Systems Engineer</title>
+    <meta name="description" content="AI Systems Engineer building autonomous production systems. Based in Germany, open to remote.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f0f0f;
+            --card: #1a1a1a;
+            --card-hover: #222;
+            --border: #2a2a2a;
+            --text: #e0e0e0;
+            --muted: #888;
+            --accent: #c8ff00;
+            --accent-dim: rgba(200,255,0,0.15);
+            --blue: #83a598;
+            --purple: #d3869b;
+            --orange: #fe8019;
+            --red: #fb4934;
+            --green: #b8bb26;
+            --gold: #fabd2f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Personalized Banner */
+        .company-banner {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-bottom: 2px solid var(--accent);
+            padding: 40px 24px;
+            display: none;
+        }
+        .company-banner.visible { display: block; }
+        .company-banner .inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .company-banner h2 {
+            color: var(--accent);
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+        .company-banner .research {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            color: #ccc;
+            font-size: 15px;
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+        .company-banner .loom-embed {
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .company-banner .loom-embed iframe {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: none;
+            border-radius: 8px;
+        }
+        .company-loading {
+            color: var(--muted);
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Nav */
+        nav {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        nav .name {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 16px;
+        }
+        nav .links { display: flex; gap: 20px; }
+        nav .links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        nav .links a:hover { color: var(--accent); }
+
+        /* Sections */
+        section { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+        section + section { padding-top: 0; }
+
+        /* Hero */
+        .hero {
+            padding: 80px 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .hero .tag {
+            display: inline-block;
+            background: var(--accent-dim);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 16px;
+        }
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 52px);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+        .hero h1 .highlight { color: var(--accent); }
+        .hero .subtitle {
+            font-size: 18px;
+            color: var(--muted);
+            max-width: 650px;
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+        .hero .links { display: flex; gap: 12px; flex-wrap: wrap; }
+        .hero .links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .hero .links .primary {
+            background: var(--accent);
+            color: #000;
+        }
+        .hero .links .primary:hover { opacity: 0.9; }
+        .hero .links .secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .hero .links .secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* Metrics */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+        .metric-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .metric-card .number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .metric-card .label {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* Section headers */
+        .section-header {
+            margin-bottom: 32px;
+        }
+        .section-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .section-header p {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        /* Systems Grid */
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .system-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 24px;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .system-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        .system-card .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 12px;
+        }
+        .status-live { color: var(--green); }
+        .status-live::before {
+            content: '';
+            width: 6px; height: 6px;
+            background: var(--green);
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .system-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        .system-card .desc {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+            flex: 1;
+            margin-bottom: 16px;
+        }
+        .system-card .tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+        .tech-badge {
+            background: var(--accent-dim);
+            color: var(--accent);
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .tech-badge.blue { background: rgba(131,165,152,0.15); color: var(--blue); }
+        .tech-badge.purple { background: rgba(211,134,155,0.15); color: var(--purple); }
+        .tech-badge.orange { background: rgba(254,128,25,0.15); color: var(--orange); }
+        .tech-badge.gold { background: rgba(250,189,47,0.15); color: var(--gold); }
+        .system-card .links {
+            display: flex;
+            gap: 10px;
+        }
+        .system-card .links a {
+            font-size: 13px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .system-card .links a:hover { text-decoration: underline; }
+
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .skill-group {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .skill-group h3 {
+            font-size: 14px;
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 12px;
+        }
+        .skill-group ul {
+            list-style: none;
+        }
+        .skill-group li {
+            color: var(--text);
+            font-size: 14px;
+            padding: 4px 0;
+        }
+        .skill-group li::before {
+            content: '>';
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            margin-right: 8px;
+        }
+
+        /* Contact */
+        .contact-grid {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .contact-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 24px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .contact-card:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .contact-card .icon { font-size: 18px; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--muted);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 600px) {
+            .hero { padding: 40px 16px; }
+            section { padding: 40px 16px; }
+            .metrics { grid-template-columns: repeat(2, 1fr); }
+            .systems-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Personalized Company Banner (hidden by default, shown via ?company=X) -->
+<div class="company-banner" id="companyBanner">
+    <div class="inner">
+        <h2 id="companyGreeting"></h2>
+        <div class="loom-embed" id="loomEmbed" style="display:none;"></div>
+        <div class="research" id="companyResearch"></div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<nav>
+    <span class="name">moha.dev</span>
+    <div class="links">
+        <a href="#systems">Systems</a>
+        <a href="#skills">Skills</a>
+        <a href="cv.html">CV</a>
+        <a href="https://github.com/saafir-coder" target="_blank">GitHub</a>
+        <a href="https://www.youtube.com/@iNNERSIZE" target="_blank">YouTube</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+    <div class="tag">AI Systems Engineer</div>
+    <h1>I build <span class="highlight">autonomous AI systems</span> that run in production.</h1>
+    <p class="subtitle">
+        6 systems running 24/7. 19 Trigger.dev tasks. Fully autonomous LinkedIn publishing.
+        RAG memory with 796 entries. All for under $15/month. Based in Germany, open to remote.
+    </p>
+    <div class="links">
+        <a href="cv.html" class="primary">View CV</a>
+        <a href="https://github.com/saafir-coder" target="_blank" class="secondary">GitHub</a>
+        <a href="https://www.youtube.com/@iNNERSIZE" target="_blank" class="secondary">YouTube</a>
+        <a href="https://www.linkedin.com/in/abdillahi-ahmed-95a0a71a3/" target="_blank" class="secondary">LinkedIn</a>
+    </div>
+</div>
+
+<!-- Metrics -->
+<section>
+    <div class="metrics">
+        <div class="metric-card">
+            <div class="number">6</div>
+            <div class="label">Systems in Production</div>
+        </div>
+        <div class="metric-card">
+            <div class="number">19</div>
+            <div class="label">Trigger.dev Tasks</div>
+        </div>
+        <div class="metric-card">
+            <div class="number">796</div>
+            <div class="label">Memory Entries (pgvector)</div>
+        </div>
+        <div class="metric-card">
+            <div class="number">6/day</div>
+            <div class="label">Autonomous LinkedIn Posts</div>
+        </div>
+        <div class="metric-card">
+            <div class="number">&lt;$15</div>
+            <div class="label">Monthly Infra Cost</div>
+        </div>
+    </div>
+</section>
+
+<!-- Systems Built -->
+<section id="systems">
+    <div class="section-header">
+        <h2>Systems I've Built</h2>
+        <p>Production systems running autonomously — not demos, not prototypes.</p>
+    </div>
+    <div class="systems-grid">
+
+        <div class="system-card">
+            <div class="status status-live">LIVE</div>
+            <h3>LinkedIn Self-Healing Authority System</h3>
+            <p class="desc">Fully autonomous content engine: generates posts, self-approves, publishes 6/day, measures engagement, runs A/B experiments, and optimizes — zero human intervention. Self-healing with automatic error recovery.</p>
+            <div class="tech">
+                <span class="tech-badge">n8n</span>
+                <span class="tech-badge blue">Trigger.dev</span>
+                <span class="tech-badge purple">Supabase</span>
+                <span class="tech-badge orange">Claude API</span>
+                <span class="tech-badge gold">LinkedIn OAuth2</span>
+            </div>
+            <div class="links">
+                <a href="https://github.com/saafir-coder/linkedin-self-healing" target="_blank">Source</a>
+                <a href="https://saafir-coder.github.io/linkedin-dashboard/" target="_blank">Live Dashboard</a>
+            </div>
+        </div>
+
+        <div class="system-card">
+            <div class="status status-live">LIVE</div>
+            <h3>Job Intelligence Pipeline</h3>
+            <p class="desc">Daily autonomous job discovery: scrapes AI roles across Germany, scores each for fit using Claude Haiku with honest gap analysis, generates tailored applications, and notifies via Telegram with one-tap approval.</p>
+            <div class="tech">
+                <span class="tech-badge blue">Trigger.dev</span>
+                <span class="tech-badge orange">Claude Haiku</span>
+                <span class="tech-badge">Apify</span>
+                <span class="tech-badge purple">Supabase</span>
+                <span class="tech-badge gold">Telegram Bot</span>
+            </div>
+            <div class="links">
+                <a href="https://github.com/saafir-coder/inner-sizze-trigger" target="_blank">Source</a>
+            </div>
+        </div>
+
+        <div class="system-card">
+            <div class="status status-live">LIVE</div>
+            <h3>Open Brain — AI Memory Engine</h3>
+            <p class="desc">Universal memory layer for AI assistants. Supabase + pgvector for semantic search across 796 memory entries. Any AI (Claude, GPT, Cursor) can read and write to shared long-term memory via MCP.</p>
+            <div class="tech">
+                <span class="tech-badge purple">Supabase</span>
+                <span class="tech-badge">pgvector</span>
+                <span class="tech-badge blue">Edge Functions</span>
+                <span class="tech-badge gold">MCP Protocol</span>
+            </div>
+            <div class="links">
+                <a href="https://github.com/saafir-coder/open-brain" target="_blank">Source</a>
+            </div>
+        </div>
+
+        <div class="system-card">
+            <div class="status status-live">LIVE</div>
+            <h3>System Health Monitor</h3>
+            <p class="desc">Real-time monitoring dashboard for all autonomous systems. Tracks 17 tasks across n8n + Trigger.dev + Supabase. 6-hourly health snapshots, cost tracking, failure alerts with auto-deduplication.</p>
+            <div class="tech">
+                <span class="tech-badge blue">Trigger.dev</span>
+                <span class="tech-badge purple">Supabase</span>
+                <span class="tech-badge gold">Telegram Alerts</span>
+            </div>
+            <div class="links">
+                <a href="https://saafir-coder.github.io/moha-os-dashboard/" target="_blank">Live Dashboard</a>
+            </div>
+        </div>
+
+        <div class="system-card">
+            <div class="status status-live">LIVE</div>
+            <h3>LinkedIn Analytics Dashboard</h3>
+            <p class="desc">Real-time engagement tracking for the autonomous LinkedIn system. Visualizes post performance at 25h/49h/73h intervals, A/B experiment results, and content pipeline health.</p>
+            <div class="tech">
+                <span class="tech-badge">Apify Scraper</span>
+                <span class="tech-badge purple">Supabase REST</span>
+                <span class="tech-badge blue">GitHub Pages</span>
+            </div>
+            <div class="links">
+                <a href="https://saafir-coder.github.io/linkedin-dashboard/" target="_blank">Live Dashboard</a>
+            </div>
+        </div>
+
+        <div class="system-card">
+            <div class="status status-live">LIVE</div>
+            <h3>Thumbnail Studio</h3>
+            <p class="desc">AI-powered YouTube thumbnail generator. 3-step pipeline: reference selection, character generation via Higgsfield Soul, and scene merging via Gemini Nano Banana 2. A/B test support built in.</p>
+            <div class="tech">
+                <span class="tech-badge orange">Gemini API</span>
+                <span class="tech-badge">Higgsfield Soul</span>
+                <span class="tech-badge blue">GitHub Pages</span>
+            </div>
+            <div class="links">
+                <a href="https://saafir-coder.github.io/thumbnail-studio/" target="_blank">Try It</a>
+                <a href="https://github.com/saafir-coder/thumbnail-studio" target="_blank">Source</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Skills -->
+<section id="skills">
+    <div class="section-header">
+        <h2>Technical Skills</h2>
+    </div>
+    <div class="skills-grid">
+        <div class="skill-group">
+            <h3>AI / LLM</h3>
+            <ul>
+                <li>Claude (Haiku, Sonnet, Opus) — tool use, structured output</li>
+                <li>Prompt engineering — scoring, generation, evaluation</li>
+                <li>RAG — pgvector, semantic search, memory systems</li>
+                <li>Multi-agent orchestration</li>
+                <li>Gemini API (image generation)</li>
+            </ul>
+        </div>
+        <div class="skill-group">
+            <h3>Automation</h3>
+            <ul>
+                <li>n8n — production workflows, OAuth2, webhooks</li>
+                <li>Trigger.dev — TypeScript task runner, cron scheduling</li>
+                <li>Apify — web scraping, data extraction</li>
+                <li>Instantly.ai — email outreach, sequences</li>
+                <li>Telegram Bot API — notifications, inline keyboards</li>
+            </ul>
+        </div>
+        <div class="skill-group">
+            <h3>Infrastructure</h3>
+            <ul>
+                <li>Supabase — PostgreSQL, Edge Functions, RLS, Storage</li>
+                <li>pgvector — vector embeddings, similarity search</li>
+                <li>GitHub Pages — static deployments, CI/CD</li>
+                <li>REST APIs — design, integration, error handling</li>
+            </ul>
+        </div>
+        <div class="skill-group">
+            <h3>Languages</h3>
+            <ul>
+                <li>TypeScript — production code, SDK integrations</li>
+                <li>JavaScript — frontend, Node.js</li>
+                <li>Python — scripting, data processing</li>
+                <li>SQL — PostgreSQL, migrations, complex queries</li>
+                <li>HTML/CSS — responsive design, dark themes</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+    <div class="section-header">
+        <h2>Get In Touch</h2>
+        <p>Open to AI Systems Engineer roles in Germany or remote.</p>
+    </div>
+    <div class="contact-grid">
+        <a class="contact-card" href="mailto:abdillahi@inner-sizze.com">
+            <span class="icon">@</span> abdillahi@inner-sizze.com
+        </a>
+        <a class="contact-card" href="https://github.com/saafir-coder" target="_blank">
+            <span class="icon">&lt;/&gt;</span> GitHub
+        </a>
+        <a class="contact-card" href="https://www.linkedin.com/in/abdillahi-ahmed-95a0a71a3/" target="_blank">
+            <span class="icon">in</span> LinkedIn
+        </a>
+        <a class="contact-card" href="https://www.youtube.com/@iNNERSIZE" target="_blank">
+            <span class="icon">&#9654;</span> YouTube
+        </a>
+    </div>
+</section>
+
+<footer>
+    Built with autonomous systems. Runs on under $15/month.
+</footer>
+
+<script>
+    // Personalized company banner via ?company=X
+    // Fetches from Supabase jobs.outreach table using anon key (read-only)
+    const SUPABASE_URL = 'https://ettlhxpeefvenungjxju.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0dGxoeHBlZWZ2ZW51bmdqeGp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxODc3NjksImV4cCI6MjA4Nzc2Mzc2OX0.7SAcxjdKHwfyc2sSgIdVCvaONYP_SE0KNuEUUwo9N0M';
+
+    async function loadCompanyBanner() {
+        const params = new URLSearchParams(window.location.search);
+        const company = params.get('company');
+        if (!company) return;
+
+        const banner = document.getElementById('companyBanner');
+        const greeting = document.getElementById('companyGreeting');
+        const research = document.getElementById('companyResearch');
+        const loomEmbed = document.getElementById('loomEmbed');
+
+        greeting.textContent = `Hi ${company} team — here's what I'd build for you`;
+        banner.classList.add('visible');
+        research.textContent = 'Loading research...';
+
+        try {
+            const resp = await fetch(
+                `${SUPABASE_URL}/rest/v1/outreach?company=ilike.%25${encodeURIComponent(company)}%25&order=created_at.desc&limit=1`,
+                {
+                    headers: {
+                        'apikey': SUPABASE_ANON,
+                        'Accept': 'application/json',
+                        'Accept-Profile': 'jobs',
+                    }
+                }
+            );
+
+            if (!resp.ok) throw new Error('Not found');
+            const data = await resp.json();
+
+            if (data.length === 0) {
+                research.textContent = `I'm preparing a personalized analysis for ${company}. Check back soon, or feel free to explore my portfolio below.`;
+                return;
+            }
+
+            const row = data[0];
+
+            // Show research
+            if (row.research_brief || row.pain_points) {
+                research.textContent = row.research_brief || row.pain_points;
+            } else {
+                research.style.display = 'none';
+            }
+
+            // Embed Loom video if available
+            if (row.loom_url) {
+                const loomId = row.loom_url.match(/loom\.com\/share\/([a-zA-Z0-9]+)/);
+                if (loomId) {
+                    loomEmbed.style.display = 'block';
+                    loomEmbed.innerHTML = `<iframe src="https://www.loom.com/embed/${loomId[1]}" allowfullscreen></iframe>`;
+                }
+            }
+
+        } catch (e) {
+            research.textContent = `I'm preparing a personalized analysis for ${company}. Check back soon, or feel free to explore my portfolio below.`;
+        }
+    }
+
+    loadCompanyBanner();
+</script>
+
+</body>
+</html>

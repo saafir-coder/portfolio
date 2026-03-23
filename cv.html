@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV — Abdillahi Ahmed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f0f0f;
+            --card: #1a1a1a;
+            --border: #2a2a2a;
+            --text: #e0e0e0;
+            --muted: #888;
+            --accent: #c8ff00;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 48px 40px;
+        }
+
+        /* Header */
+        .cv-header {
+            margin-bottom: 32px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 20px;
+        }
+        .cv-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .cv-header .title {
+            font-size: 16px;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+        .cv-header .meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .cv-header .meta a {
+            color: var(--muted);
+            text-decoration: none;
+        }
+        .cv-header .meta a:hover { color: var(--accent); }
+
+        /* Sections */
+        .cv-section {
+            margin-bottom: 28px;
+        }
+        .cv-section h2 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Profile */
+        .profile p {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Skills */
+        .skills-row {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 8px;
+            font-size: 13px;
+            padding: 4px 0;
+        }
+        .skills-row .label {
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        /* Systems */
+        .cv-system {
+            margin-bottom: 16px;
+        }
+        .cv-system .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+        .cv-system h3 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+        .cv-system .stack {
+            font-size: 12px;
+            color: var(--muted);
+        }
+        .cv-system .desc {
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .cv-system .metric {
+            font-size: 13px;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+
+        /* Open Source */
+        .repo-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+        .repo-row a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .repo-row .desc { color: var(--muted); }
+
+        /* Education */
+        .edu-item {
+            font-size: 13px;
+            padding: 2px 0;
+        }
+        .edu-item::before {
+            content: '>';
+            color: var(--accent);
+            margin-right: 8px;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--muted);
+            text-decoration: none;
+        }
+        .back-link:hover { color: var(--accent); }
+
+        /* Print styles */
+        @media print {
+            :root {
+                --bg: #fff;
+                --card: #fff;
+                --border: #ddd;
+                --text: #222;
+                --muted: #666;
+                --accent: #333;
+            }
+            @page { size: A4; margin: 15mm; }
+            body { background: #fff; color: #222; font-size: 11px; }
+            .page { padding: 0; max-width: 100%; }
+            .back-link { display: none; }
+            .cv-header { border-bottom-color: #333; }
+            .cv-header h1 { font-size: 22px; }
+            .cv-section h2 { color: #333; border-bottom-color: #ddd; }
+            .cv-system .metric { color: #333; font-weight: 600; }
+            a { color: #333; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <a href="index.html" class="back-link">&larr; Back to Portfolio</a>
+
+    <div class="cv-header">
+        <h1>Abdillahi Ahmed</h1>
+        <div class="title">AI Systems Engineer</div>
+        <div class="meta">
+            <span>Germany (open to remote)</span>
+            <a href="mailto:abdillahi@inner-sizze.com">abdillahi@inner-sizze.com</a>
+            <a href="https://github.com/saafir-coder" target="_blank">github.com/saafir-coder</a>
+            <a href="https://www.linkedin.com/in/abdillahi-ahmed-95a0a71a3/" target="_blank">LinkedIn</a>
+            <a href="https://saafir-coder.github.io/portfolio/" target="_blank">Portfolio</a>
+        </div>
+    </div>
+
+    <div class="cv-section profile">
+        <h2>Profile</h2>
+        <p>AI Systems Engineer who builds autonomous systems that run in production. I design, build, and deploy end-to-end AI automation pipelines — from LLM integration and multi-agent orchestration to self-healing workflows and real-time monitoring. 6 systems currently running 24/7 at under $15/month total infrastructure cost.</p>
+    </div>
+
+    <div class="cv-section">
+        <h2>Core Skills</h2>
+        <div class="skills-row">
+            <div class="label">AI / LLM</div>
+            <div>Claude API (tool use, structured output), Prompt Engineering, RAG (pgvector), Multi-Agent Systems, Gemini API</div>
+        </div>
+        <div class="skills-row">
+            <div class="label">Automation</div>
+            <div>n8n, Trigger.dev, Apify, Instantly.ai, Telegram Bot API, Webhooks, Cron Scheduling</div>
+        </div>
+        <div class="skills-row">
+            <div class="label">Infrastructure</div>
+            <div>Supabase (PostgreSQL, Edge Functions, RLS), pgvector, GitHub Pages, REST API Design</div>
+        </div>
+        <div class="skills-row">
+            <div class="label">Languages</div>
+            <div>TypeScript, JavaScript, Python, SQL, HTML/CSS</div>
+        </div>
+    </div>
+
+    <div class="cv-section">
+        <h2>Systems Built</h2>
+
+        <div class="cv-system">
+            <div class="header-row">
+                <h3>LinkedIn Self-Healing Authority System</h3>
+                <span class="stack">n8n + Trigger.dev + Supabase + Claude API</span>
+            </div>
+            <div class="desc">Fully autonomous content engine: generates briefs, creates posts, self-approves, publishes, measures engagement at 25h/49h/73h intervals, runs A/B experiments, and self-optimizes. Zero human intervention with automatic error recovery.</div>
+            <div class="metric">6 posts/day autonomous | Self-healing error recovery | $5-15/month operating cost</div>
+        </div>
+
+        <div class="cv-system">
+            <div class="header-row">
+                <h3>Job Intelligence Pipeline</h3>
+                <span class="stack">Trigger.dev + Claude Haiku + Apify + Supabase</span>
+            </div>
+            <div class="desc">Daily autonomous job discovery across Germany. Scrapes AI/automation roles, evaluates fit using Claude Haiku with honest gap analysis, generates tailored cover letters, stores in Supabase with full audit trail, and notifies via Telegram.</div>
+            <div class="metric">9 search queries | Fit scoring 1-10 | Auto-generated applications for score 7+</div>
+        </div>
+
+        <div class="cv-system">
+            <div class="header-row">
+                <h3>Open Brain — AI Memory Engine</h3>
+                <span class="stack">Supabase + pgvector + Edge Functions + MCP</span>
+            </div>
+            <div class="desc">Universal long-term memory layer for AI assistants. Any AI (Claude, GPT, Cursor) reads and writes to shared memory via MCP protocol. Semantic search across 796 entries using pgvector embeddings.</div>
+            <div class="metric">796 memory entries | pgvector semantic search | Cross-AI compatibility via MCP</div>
+        </div>
+
+        <div class="cv-system">
+            <div class="header-row">
+                <h3>System Health Monitor</h3>
+                <span class="stack">Trigger.dev + Supabase + Telegram</span>
+            </div>
+            <div class="desc">Real-time monitoring for all autonomous systems. Tracks 17 tasks across n8n, Trigger.dev, and Supabase. 6-hourly health snapshots, cost tracking per task, failure alerts with auto-deduplication fingerprinting.</div>
+            <div class="metric">17 tasks monitored | 6-hourly snapshots | Alert deduplication</div>
+        </div>
+
+        <div class="cv-system">
+            <div class="header-row">
+                <h3>Thumbnail Studio</h3>
+                <span class="stack">Gemini API + Higgsfield Soul + GitHub Pages</span>
+            </div>
+            <div class="desc">AI-powered YouTube thumbnail generator with 3-step pipeline: reference selection, character generation via Higgsfield, and scene merging via Gemini Nano Banana 2. Built-in A/B testing support.</div>
+            <div class="metric">3-step AI pipeline | A/B test support | Free YouTube search via Piped/Invidious API</div>
+        </div>
+    </div>
+
+    <div class="cv-section">
+        <h2>Open Source</h2>
+        <div class="repo-row">
+            <a href="https://github.com/saafir-coder/open-brain" target="_blank">open-brain</a>
+            <span class="desc">Universal AI memory layer — Supabase + pgvector + MCP</span>
+        </div>
+        <div class="repo-row">
+            <a href="https://github.com/saafir-coder/linkedin-self-healing" target="_blank">linkedin-self-healing</a>
+            <span class="desc">Autonomous LinkedIn publishing system with self-healing</span>
+        </div>
+        <div class="repo-row">
+            <a href="https://github.com/saafir-coder/inner-sizze-trigger" target="_blank">inner-sizze-trigger</a>
+            <span class="desc">19 Trigger.dev tasks — job pipeline, metrics, monitoring</span>
+        </div>
+        <div class="repo-row">
+            <a href="https://github.com/saafir-coder/thumbnail-studio" target="_blank">thumbnail-studio</a>
+            <span class="desc">AI thumbnail generator — Gemini + Higgsfield + A/B testing</span>
+        </div>
+    </div>
+
+    <div class="cv-section">
+        <h2>Education & Proof</h2>
+        <div class="edu-item">Self-taught AI Systems Engineer — 6 production systems as proof of capability</div>
+        <div class="edu-item">YouTube channel (@iNNERSIZE) — technical AI engineering content</div>
+        <div class="edu-item">14 documented case studies on AI automation builds</div>
+        <div class="edu-item">Full-stack portfolio: saafir-coder.github.io/portfolio</div>
+    </div>
+</div>
+
+</body>
+</html>
