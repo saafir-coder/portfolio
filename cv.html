@@ -7,12 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0a0f;
-            --card: #16161f;
-            --border: #252530;
-            --text: #e4e4ed;
-            --muted: #8888a0;
-            --accent: #5eead4;
+            --bg: #f2f0ed;
+            --card: #ffffff;
+            --border: #d8d6d2;
+            --text: #333333;
+            --muted: #6d6d6d;
+            --accent: #e27500;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -163,17 +163,17 @@
                 --card: #fff;
                 --border: #ddd;
                 --text: #222;
-                --muted: #666;
-                --accent: #333;
+                --muted: #555;
+                --accent: #c06000;
             }
             @page { size: A4; margin: 15mm; }
             body { background: #fff; color: #222; font-size: 11px; }
             .page { padding: 0; max-width: 100%; }
             .back-link { display: none; }
-            .cv-header { border-bottom-color: #333; }
+            .cv-header { border-bottom-color: var(--accent); }
             .cv-header h1 { font-size: 22px; }
-            .cv-section h2 { color: #333; border-bottom-color: #ddd; }
-            .cv-system .metric { color: #333; font-weight: 600; }
+            .cv-section h2 { color: var(--accent); border-bottom-color: #ddd; }
+            .cv-system .metric { color: var(--accent); font-weight: 600; }
             a { color: #333; }
         }
     </style>
