@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Pipeline — Live Animation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0d1117; overflow: hidden; }
+        canvas { display: block; width: 100%; height: 100vh; }
+    </style>
+</head>
+<body>
+<canvas id="pipeline"></canvas>
+<script>
+const canvas = document.getElementById('pipeline');
+const ctx = canvas.getContext('2d');
+
+let W, H, scale, offsetX, offsetY;
+
+function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    W = canvas.clientWidth;
+    H = canvas.clientHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // Scale to fit the diagram (designed for ~1400x700)
+    scale = Math.min(W / 1400, H / 750) * 0.85;
+    offsetX = (W - 1400 * scale) / 2;
+    offsetY = (H - 750 * scale) / 2;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Colors
+const COLORS = {
+    bg: '#0d1117',
+    card: '#1c2333',
+    cardBorder: '#2d3548',
+    text: '#c9d1d9',
+    textMuted: '#8b949e',
+    line: '#30363d',
+    lineDash: '#30363d',
+    // Node accent colors
+    schedule: '#8b949e',
+    brief: '#f47067',
+    claude: '#d4a574',
+    supabase: '#3ecf8e',
+    trigger: '#a78bfa',
+    linkedin: '#0a66c2',
+    apify: '#00d4aa',
+    dashboard: '#8b949e',
+    error: '#f85149',
+    quality: '#3fb950',
+    abtest: '#d2a8ff',
+    packet: '#ffffff',
+    diamond: '#c9d1d9',
+};
+
+// Node definitions (x, y in design coords)
+const NODES = [
+    { id: 'schedule',  x: 100,  y: 350, label: 'Schedule Trigger', color: COLORS.schedule, icon: '⏰' },
+    { id: 'brief',     x: 280,  y: 350, label: 'Brief Generator',  color: COLORS.brief,    icon: '🔗' },
+    { id: 'claude',    x: 460,  y: 350, label: 'Claude API',       color: COLORS.claude,   icon: 'AI' },
+    { id: 'supabase',  x: 640,  y: 350, label: 'content_briefs',   color: COLORS.supabase, icon: '⚡' },
+    { id: 'trigger',   x: 820,  y: 350, label: 'Auto-Publisher',   color: COLORS.trigger,  icon: 'T' },
+    { id: 'linkedin',  x: 1060, y: 350, label: 'LinkedIn Post',    color: COLORS.linkedin, icon: 'in' },
+    { id: 'apify',     x: 1200, y: 350, label: 'Metrics Collector', color: COLORS.apify,   icon: 'A' },
+    { id: 'dashboard', x: 1340, y: 350, label: 'Live Dashboard',   color: COLORS.dashboard, icon: '📊' },
+];
+
+const SUB_NODES = [
+    { id: 'error',   x: 820, y: 510, label: 'Error Recovery',  color: COLORS.error,   icon: '!' },
+    { id: 'quality', x: 820, y: 600, label: 'Quality Score',   color: COLORS.quality,  icon: '✓' },
+    { id: 'abtest',  x: 820, y: 690, label: 'A/B Variant',     color: COLORS.abtest,   icon: '⚗' },
+];
+
+// Diamond (Score > 7?)
+const DIAMOND = { x: 950, y: 350, label: 'Score > 7?' };
+
+// Connections (main pipeline)
+const MAIN_PATH = ['schedule', 'brief', 'claude', 'supabase', 'trigger'];
+// After trigger: to diamond, then to linkedin
+// After linkedin: to apify, to dashboard
+
+// Dot grid
+const DOT_SPACING = 30;
+let dotPhase = 0;
+
+// Packets
+const packets = [];
+let packetTimer = 0;
+const PACKET_INTERVAL = 3.5; // seconds between new packets
+
+// Packet path segments with timing
+function createPacket() {
+    return {
+        phase: 0, // 0=main path, 1=claude pause, 2=post-claude, 3=trigger-to-diamond, 4=diamond-to-linkedin, 5=linkedin-apify-dash
+        progress: 0,
+        speed: 0.008 + Math.random() * 0.003,
+        alive: true,
+        glow: 1,
+        subPackets: [], // spawned at trigger node
+    };
+}
+
+function getNodePos(id) {
+    const n = NODES.find(n => n.id === id) || SUB_NODES.find(n => n.id === id);
+    return n ? { x: n.x * scale + offsetX, y: n.y * scale + offsetY } : { x: 0, y: 0 };
+}
+
+function getNodeDesignPos(id) {
+    const n = NODES.find(n => n.id === id) || SUB_NODES.find(n => n.id === id);
+    return n ? { x: n.x, y: n.y } : { x: 0, y: 0 };
+}
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function drawDotGrid() {
+    dotPhase += 0.003;
+    const breathe = Math.sin(dotPhase) * 0.3 + 0.7;
+    ctx.fillStyle = `rgba(48, 54, 61, ${0.3 * breathe})`;
+    for (let x = DOT_SPACING; x < W; x += DOT_SPACING * scale) {
+        for (let y = DOT_SPACING; y < H; y += DOT_SPACING * scale) {
+            ctx.beginPath();
+            ctx.arc(x, y, 1, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+}
+
+function drawRoundedRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+}
+
+function drawNode(node, glowIntensity = 0) {
+    const s = scale;
+    const nx = node.x * s + offsetX;
+    const ny = node.y * s + offsetY;
+    const w = 90 * s;
+    const h = 70 * s;
+    const r = 12 * s;
+
+    // Glow
+    if (glowIntensity > 0) {
+        ctx.save();
+        ctx.shadowColor = node.color;
+        ctx.shadowBlur = 25 * glowIntensity * s;
+        ctx.fillStyle = node.color + '20';
+        drawRoundedRect(nx - w/2, ny - h/2, w, h, r);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    // Card
+    ctx.fillStyle = COLORS.card;
+    ctx.strokeStyle = glowIntensity > 0 ? node.color + '80' : COLORS.cardBorder;
+    ctx.lineWidth = 1.5 * s;
+    drawRoundedRect(nx - w/2, ny - h/2, w, h, r);
+    ctx.fill();
+    ctx.stroke();
+
+    // Icon circle
+    const iconR = 16 * s;
+    ctx.beginPath();
+    ctx.arc(nx, ny - 6 * s, iconR, 0, Math.PI * 2);
+    ctx.fillStyle = node.color + '30';
+    ctx.fill();
+
+    // Icon text
+    ctx.fillStyle = node.color;
+    ctx.font = `bold ${12 * s}px Inter, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(node.icon, nx, ny - 5 * s);
+
+    // Label
+    ctx.fillStyle = COLORS.textMuted;
+    ctx.font = `${9 * s}px Inter, sans-serif`;
+    ctx.fillText(node.label, nx, ny + h/2 + 14 * s);
+}
+
+function drawSubNode(node, glowIntensity = 0) {
+    const s = scale;
+    const nx = node.x * s + offsetX;
+    const ny = node.y * s + offsetY;
+    const r = 22 * s;
+
+    if (glowIntensity > 0) {
+        ctx.save();
+        ctx.shadowColor = node.color;
+        ctx.shadowBlur = 20 * glowIntensity * s;
+        ctx.beginPath();
+        ctx.arc(nx, ny, r, 0, Math.PI * 2);
+        ctx.fillStyle = node.color + '20';
+        ctx.fill();
+        ctx.restore();
+    }
+
+    ctx.beginPath();
+    ctx.arc(nx, ny, r, 0, Math.PI * 2);
+    ctx.fillStyle = COLORS.card;
+    ctx.strokeStyle = glowIntensity > 0 ? node.color + '80' : COLORS.cardBorder;
+    ctx.lineWidth = 1.5 * s;
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = node.color;
+    ctx.font = `bold ${12 * s}px Inter, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(node.icon, nx, ny);
+
+    ctx.fillStyle = COLORS.textMuted;
+    ctx.font = `${9 * s}px Inter, sans-serif`;
+    ctx.fillText(node.label, nx, ny + r + 14 * s);
+}
+
+function drawDiamond() {
+    const s = scale;
+    const dx = DIAMOND.x * s + offsetX;
+    const dy = DIAMOND.y * s + offsetY;
+    const size = 20 * s;
+
+    ctx.save();
+    ctx.translate(dx, dy);
+    ctx.rotate(Math.PI / 4);
+    ctx.fillStyle = COLORS.card;
+    ctx.strokeStyle = COLORS.cardBorder;
+    ctx.lineWidth = 1.5 * s;
+    ctx.fillRect(-size, -size, size * 2, size * 2);
+    ctx.strokeRect(-size, -size, size * 2, size * 2);
+    ctx.restore();
+
+    ctx.fillStyle = COLORS.text;
+    ctx.font = `${10 * s}px 'JetBrains Mono', monospace`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Score > 7?', dx, dy);
+}
+
+function drawConnection(fromId, toId, dashed = false) {
+    const s = scale;
+    const from = getNodeDesignPos(fromId);
+    const to = getNodeDesignPos(toId);
+    const fx = from.x * s + offsetX;
+    const fy = from.y * s + offsetY;
+    const tx = to.x * s + offsetX;
+    const ty = to.y * s + offsetY;
+
+    ctx.beginPath();
+    ctx.moveTo(fx + 45 * s, fy);
+    ctx.lineTo(tx - 45 * s, ty);
+    ctx.strokeStyle = dashed ? COLORS.lineDash : COLORS.line;
+    ctx.lineWidth = 1.5 * s;
+    if (dashed) ctx.setLineDash([6 * s, 4 * s]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+}
+
+function drawConnectionPoints(x1, y1, x2, y2, dashed = false) {
+    const s = scale;
+    ctx.beginPath();
+    ctx.moveTo(x1 * s + offsetX, y1 * s + offsetY);
+    ctx.lineTo(x2 * s + offsetX, y2 * s + offsetY);
+    ctx.strokeStyle = dashed ? COLORS.lineDash : COLORS.line;
+    ctx.lineWidth = 1.5 * s;
+    if (dashed) ctx.setLineDash([6 * s, 4 * s]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+}
+
+function drawPacket(x, y, color = COLORS.packet, size = 4) {
+    const s = scale;
+    ctx.save();
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 12 * s;
+    ctx.beginPath();
+    ctx.arc(x, y, size * s, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.restore();
+}
+
+// Node glow state
+const nodeGlows = {};
+NODES.forEach(n => nodeGlows[n.id] = 0);
+SUB_NODES.forEach(n => nodeGlows[n.id] = 0);
+
+function triggerGlow(id) {
+    nodeGlows[id] = 1;
+}
+
+// Animation state for packets
+const activePackets = [];
+
+function spawnPacket() {
+    activePackets.push({
+        segment: 0, // which segment of the path
+        t: 0,
+        speed: 0.004 + Math.random() * 0.002,
+        claudePause: 0,
+        splitDone: false,
+    });
+}
+
+// Path segments the packet follows
+// 0: schedule → brief
+// 1: brief → claude
+// 2: claude (pause with spinning)
+// 3: claude → supabase
+// 4: supabase → trigger
+// 5: trigger → diamond
+// 6: diamond → linkedin
+// 7: linkedin → apify
+// 8: apify → dashboard
+
+const PATH_SEGMENTS = [
+    { from: 'schedule', to: 'brief' },
+    { from: 'brief', to: 'claude' },
+    { from: 'claude', to: 'claude', pause: true, duration: 120 }, // pause
+    { from: 'claude', to: 'supabase' },
+    { from: 'supabase', to: 'trigger' },
+    // trigger to diamond (custom coords)
+    { fromCoord: [865, 350], toCoord: [930, 350] }, // trigger edge to diamond
+    // diamond to linkedin
+    { fromCoord: [970, 350], toCoord: [1015, 350] }, // diamond to linkedin
+    { from: 'linkedin', to: 'apify' },
+    { from: 'apify', to: 'dashboard' },
+];
+
+// Sub-packet paths (from trigger down to sub-nodes)
+const SUB_PATHS = [
+    { fromCoord: [820, 385], toCoord: [820, 488], color: COLORS.error, targetId: 'error' },
+    { fromCoord: [820, 385], toCoord: [820, 578], color: COLORS.quality, targetId: 'quality' },
+    { fromCoord: [820, 385], toCoord: [820, 668], color: COLORS.abtest, targetId: 'abtest' },
+];
+
+let time = 0;
+let spawnTimer = 0;
+
+function update(dt) {
+    time += dt;
+    spawnTimer += dt;
+
+    if (spawnTimer > PACKET_INTERVAL * 1000) {
+        spawnPacket();
+        spawnTimer = 0;
+    }
+
+    // Decay glows
+    for (const id in nodeGlows) {
+        if (nodeGlows[id] > 0) nodeGlows[id] = Math.max(0, nodeGlows[id] - dt * 0.002);
+    }
+
+    // Update packets
+    for (const p of activePackets) {
+        if (p.dead) continue;
+
+        const seg = PATH_SEGMENTS[p.segment];
+        if (!seg) { p.dead = true; continue; }
+
+        if (seg.pause) {
+            p.claudePause += dt;
+            if (p.claudePause > (seg.duration || 100) * 10) {
+                p.segment++;
+                p.t = 0;
+                triggerGlow('claude');
+            }
+            continue;
+        }
+
+        p.t += p.speed * (dt / 16);
+        if (p.t >= 1) {
+            // Arrived at destination
+            if (seg.to) triggerGlow(seg.to);
+            if (seg.from) triggerGlow(seg.from);
+
+            // At trigger node, spawn sub-packets
+            if (p.segment === 4 && !p.splitDone) {
+                p.splitDone = true;
+                for (const sp of SUB_PATHS) {
+                    activePackets.push({
+                        segment: -1, // special sub-path
+                        subPath: sp,
+                        t: 0,
+                        speed: 0.003 + Math.random() * 0.002,
+                        dead: false,
+                    });
+                }
+            }
+
+            p.segment++;
+            p.t = 0;
+        }
+    }
+
+    // Update sub-path packets
+    for (const p of activePackets) {
+        if (p.dead || p.segment !== -1) continue;
+        p.t += p.speed * (dt / 16);
+        if (p.t >= 1) {
+            triggerGlow(p.subPath.targetId);
+            p.dead = true;
+        }
+    }
+
+    // Clean dead packets
+    for (let i = activePackets.length - 1; i >= 0; i--) {
+        if (activePackets[i].dead) activePackets.splice(i, 1);
+    }
+}
+
+function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Background
+    ctx.fillStyle = COLORS.bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Dot grid
+    drawDotGrid();
+
+    // Connections (main)
+    drawConnection('schedule', 'brief');
+    drawConnection('brief', 'claude');
+    drawConnection('claude', 'supabase');
+    drawConnection('supabase', 'trigger');
+    // Trigger to diamond
+    drawConnectionPoints(865, 350, 930, 350);
+    // Diamond to linkedin
+    drawConnectionPoints(970, 350, 1015, 350);
+    drawConnection('linkedin', 'apify');
+    drawConnection('apify', 'dashboard');
+
+    // Dashed connections to sub-nodes
+    drawConnectionPoints(820, 385, 820, 488, true);
+    drawConnectionPoints(820, 530, 820, 578, true);
+    drawConnectionPoints(820, 620, 820, 668, true);
+
+    // Draw nodes
+    NODES.forEach(n => drawNode(n, nodeGlows[n.id]));
+    SUB_NODES.forEach(n => drawSubNode(n, nodeGlows[n.id]));
+    drawDiamond();
+
+    // Draw packets
+    const s = scale;
+    for (const p of activePackets) {
+        if (p.dead) continue;
+
+        // Sub-path packets
+        if (p.segment === -1) {
+            const sp = p.subPath;
+            const px = lerp(sp.fromCoord[0], sp.toCoord[0], p.t) * s + offsetX;
+            const py = lerp(sp.fromCoord[1], sp.toCoord[1], p.t) * s + offsetY;
+            drawPacket(px, py, sp.color, 3);
+            continue;
+        }
+
+        const seg = PATH_SEGMENTS[p.segment];
+        if (!seg) continue;
+
+        // Claude pause — spinning ring
+        if (seg.pause) {
+            const cx = 460 * s + offsetX;
+            const cy = 350 * s + offsetY;
+            const angle = (time * 0.005) % (Math.PI * 2);
+            const ringR = 35 * s;
+
+            ctx.save();
+            ctx.strokeStyle = COLORS.claude + '60';
+            ctx.lineWidth = 2 * s;
+            ctx.beginPath();
+            ctx.arc(cx, cy, ringR, angle, angle + Math.PI * 1.2);
+            ctx.stroke();
+            ctx.restore();
+
+            // Pulse glow
+            const pulse = Math.sin(time * 0.008) * 0.3 + 0.7;
+            nodeGlows['claude'] = pulse;
+            continue;
+        }
+
+        let fx, fy, tx, ty;
+        if (seg.fromCoord) {
+            fx = seg.fromCoord[0] * s + offsetX;
+            fy = seg.fromCoord[1] * s + offsetY;
+            tx = seg.toCoord[0] * s + offsetX;
+            ty = seg.toCoord[1] * s + offsetY;
+        } else {
+            const from = getNodeDesignPos(seg.from);
+            const to = getNodeDesignPos(seg.to);
+            fx = (from.x + 45) * s + offsetX;
+            fy = from.y * s + offsetY;
+            tx = (to.x - 45) * s + offsetX;
+            ty = to.y * s + offsetY;
+        }
+
+        const px = lerp(fx, tx, p.t);
+        const py = lerp(fy, ty, p.t);
+        drawPacket(px, py);
+    }
+}
+
+let lastTime = performance.now();
+function loop(now) {
+    const dt = now - lastTime;
+    lastTime = now;
+    update(dt);
+    draw();
+    requestAnimationFrame(loop);
+}
+
+// Start with a packet already in flight
+spawnPacket();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
